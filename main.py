@@ -36,15 +36,6 @@ def get_data(url):
         dth = dth.text.strip()
         table_headers.append(dth)
         
-    with open(file=f'data_{cur_date}.csv', mode='w') as file:
-        writer = csv.writer(file)
-        
-        writer.writerow(
-            (
-                table_headers
-            )
-        )
-        
     tbody_trs = table.find('tbody').find_all('tr')
     
     ids = []
@@ -64,16 +55,12 @@ def get_data(url):
             else:
                 area_data = 'None'
 
-            data.append(area_data)
+        data.append([area, area_data])
             
-        with open(file=f'data_{cur_date}.csv', mode='a') as file:
-            writer = csv.writer(file)
-            
-            writer.writerow(
-                (
-                    data
-                )
-            )
+    with open(file=f"data_{current_date}.csv", mode="w", encoding="utf-8") as file:
+        DictWriter = csv.DictWriter(file, table_headers)
+        DictWriter.writeheader()
+        DictWriter.writerows(data)
     
     with open(file='ids.txt', mode='w') as file:
         for id in ids:
